@@ -11,7 +11,7 @@ output: html_notebook
 
 -   Ignacio Turró Bautista
 
-*Prueba de pull Ruben*
+*Prueba de pull Andrea*
 
 ## EXERCISE:
 
