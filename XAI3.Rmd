@@ -3,6 +3,14 @@ title: "XAI 3: Model-Agnostic methods"
 output: html_notebook
 ---
 
+**Alumnos:**
+
+-   Andrea Pérez López
+
+-   Rubén Marco Cabanes
+
+-   Ignacio Turró Bautista
+
 ## EXERCISE:
 
 Apply PDP to the regression example of predicting bike rentals. Fit a random forest approximation for the prediction of bike rentals (**cnt**). Use the partial dependence plot to visualize the relationships the model learned. Use the slides shown in class as model.  
@@ -19,7 +27,6 @@ library(reshape2)
 library(lubridate)
 library(randomForestSRC)
 
-#setwd("/Users/cmonserr/OneDrive - UPV/Trabajo_2/Asignaturas/Evaluacion de modelos/Practicas/Practica 3/Bike-Sharing-Dataset")
 days <- read.csv("day.csv")
 hour <- read.csv("hour.csv")
 
@@ -61,21 +68,31 @@ Show the density distribution of both input features with the 2D plot as shown i
 TIP: Use geom_tile() to generate the 2D plot. Set width and height to avoid holes. 
 
 ```{r}
-p1 = ggplot(days_since, aes(x=days_since_2011, y=results$days_since_2011)) +
+p1 = ggplot(days_since, aes(x = days_since_2011, y = results$days_since_2011)) +
   geom_line() + ylim(c(0,6000)) + geom_rug(alpha = 0.1, sides = "b") +
   ylab("Prediction") + xlab("Days since 2011")
 
-p2 = ggplot(days_since, aes(x=temp, y=results$temp)) + geom_line() + ylim(c(0,6000)) +
+p2 = ggplot(days_since, aes(x = temp, y=results$temp)) + geom_line() + ylim(c(0,6000)) +
   geom_rug(alpha = 0.1, sides = "b")+ xlab("Temperature")
 
-p3 = ggplot(days_since, aes(x=hum, y=results$hum)) + geom_line() + ylim(c(0,6000)) +
+p3 = ggplot(days_since, aes(x = hum, y = results$hum)) + geom_line() + ylim(c(0,6000)) +
   geom_rug(alpha = 0.1, sides = "b") + xlab("Humidity")
 
-p4 = ggplot(days_since, aes(x=windspeed, y=results$windspeed)) + geom_line() + ylim(c(0,6000)) +
+p4 = ggplot(days_since, aes(x = windspeed, y = results$windspeed)) + geom_line() + ylim(c(0,6000)) +
   geom_rug(alpha = 0.1, sides = "b") + xlab("Wind speed")
 
 subplot(p1, p2, p3, p4, shareY = TRUE, shareX = FALSE, titleX = TRUE)
 ```
+
+
+En el primer gráfico podemos observar que el alquiler de bicicletas aumenta con el tiempo. Además, a principios del año 2012 se aprecia una subida del alquiler de biciletas, ya que la pendiente correspondiente a esta época crece.
+
+En el gráfico correspondiente a la Temperatura se observa una correlación positiva entre los grados de temperatura y el alquiler de bicicletas. Esto podría venir dado por el hecho de que la gente prefiere alquilar bicicletas en días con temperaturas más agradables. Sin embargo, detectamos una bajada del alquiler de bicicletas pasados los 24º. Esto puede ser debido a la falta de datos para esas temperaturas, por lo que no se tendría que tener en consideración. 
+
+El gráfico relacionado con la Humedad presenta una pendiente constante en el inicio que podemos relacionar con la falta de observaciones. Al rededor del 50% de humedad, cuando empieza a haber más densidad de datos el alquiler de bicicletas disminuye, ya que eso provoca una sensación térmica mayor.
+
+En el último gráfico vemos una pendiente de predicción bastante constante debido a que los datos se concentran entre los valores 5km/h a 20km/h, y en estos casos no es un factor muy significativo en la variación del alquiler de bicicletas. A su vez, cuando comienza a decrecer más significativamente es cuando menos densidad de observaciones disponemos.
+
 
 ## QUESTION:
 
@@ -83,7 +100,6 @@ Interpret the results.
 
 
 ```{r}
-
 sampled <- sample_n(days_since, 40)
 temp <- sampled$temp
 hum <- sampled$hum
@@ -98,7 +114,6 @@ for(i in 1:nrow(th)){
   sal <- predict(rf, r)$predicted
   th[["p"]][i] <- sum(sal) / nr
 }
-
 ```
 
 
@@ -115,7 +130,6 @@ Analyse the influence of **bedrooms, bathrooms, sqft_living** and **floors** on 
 
 
 ```{r}
-
 d <- read.csv("kc_house_data.csv")
 
 sampled <- sample_n(d, 1000)
@@ -135,6 +149,5 @@ for(c in names(results)[1:4])
     results[[c]][i] <- sum(sal) / nr
   }
 }
-
 ```
 
