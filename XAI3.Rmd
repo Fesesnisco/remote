@@ -3,23 +3,14 @@ title: "XAI 3: Model-Agnostic methods"
 output: html_notebook
 ---
 
-**Alumnos:**
-
--   Andrea Pérez López
-
--   Rubén Marco Cabanes
-
--   Ignacio Turró Bautista
-
-*Prueba de pull Andrea*
-
 ## EXERCISE:
 
-Apply PDP to the regression example of predicting bike rentals. Fit a random forest approximation for the prediction of bike rentals (**cnt**). Use the partial dependence plot to visualize the relationships the model learned. Use the slides shown in class as model.
+Apply PDP to the regression example of predicting bike rentals. Fit a random forest approximation for the prediction of bike rentals (**cnt**). Use the partial dependence plot to visualize the relationships the model learned. Use the slides shown in class as model.  
 
 ## QUESTION:
 
 Analyse the influence of **days since 2011, temperature, humidity** and **wind speed** on the predicted bike counts.
+
 
 ```{r}
 library(dplyr)
@@ -57,23 +48,39 @@ for(c in names(results)[1:4])
     results[[c]][i] <- sum(sal) / nr
   }
 }
-
-
 ```
 
 ## EXERCISE:
 
 Generate a 2D Partial Dependency Plot with humidity and temperature to predict the number of bikes rented depending of those parameters.
 
-BE CAREFUL: due to the size, extract a set of random samples from the BBDD before generating the the data for the Partial Dependency Plot.
+BE CAREFUL: due to the size, extract a set of random samples from the BBDD before generating the the data for the Partial Dependency Plot. 
 
-Show the density distribution of both input features with the 2D plot as shown in the class slides.
+Show the density distribution of both input features with the 2D plot as shown in the class slides. 
 
-TIP: Use geom_tile() to generate the 2D plot. Set width and height to avoid holes.
+TIP: Use geom_tile() to generate the 2D plot. Set width and height to avoid holes. 
+
+```{r}
+p1 = ggplot(days_since, aes(x=days_since_2011, y=results$days_since_2011)) +
+  geom_line() + ylim(c(0,6000)) + geom_rug(alpha = 0.1, sides = "b") +
+  ylab("Prediction") + xlab("Days since 2011")
+
+p2 = ggplot(days_since, aes(x=temp, y=results$temp)) + geom_line() + ylim(c(0,6000)) +
+  geom_rug(alpha = 0.1, sides = "b")+ xlab("Temperature")
+
+p3 = ggplot(days_since, aes(x=hum, y=results$hum)) + geom_line() + ylim(c(0,6000)) +
+  geom_rug(alpha = 0.1, sides = "b") + xlab("Humidity")
+
+p4 = ggplot(days_since, aes(x=windspeed, y=results$windspeed)) + geom_line() + ylim(c(0,6000)) +
+  geom_rug(alpha = 0.1, sides = "b") + xlab("Wind speed")
+
+subplot(p1, p2, p3, p4, shareY = TRUE, shareX = FALSE, titleX = TRUE)
+```
 
 ## QUESTION:
 
 Interpret the results.
+
 
 ```{r}
 
@@ -94,15 +101,18 @@ for(i in 1:nrow(th)){
 
 ```
 
+
 ## EXERCISE:
 
-Apply the previous concepts to predict the **price** of a house from the database **kc_house_data.csv**. In this case, use again a random forest approximation for the prediction based on the features **bedrooms**, **bathrooms**, **sqft_living**, **sqft_lot**, **floors** and **yr_built**. Use the partial dependence plot to visualize the relationships the model learned.
+Apply the previous concepts to predict the **price** of a house from the database **kc_house_data.csv**. In this case, use again a random forest approximation for the prediction based on the features **bedrooms**, **bathrooms**, **sqft_living**, **sqft_lot**, **floors** and **yr_built**. 
+Use the partial dependence plot to visualize the relationships the model learned.
 
-BE CAREFUL: due to the size, extract a set of random samples from the BBDD before generating the data for the Partial Dependency Plot.
+BE CAREFUL: due to the size, extract a set of random samples from the BBDD before generating the data for the Partial Dependency Plot. 
 
 ## QUESTION:
 
 Analyse the influence of **bedrooms, bathrooms, sqft_living** and **floors** on the predicted price.
+
 
 ```{r}
 
@@ -127,3 +137,4 @@ for(c in names(results)[1:4])
 }
 
 ```
+
