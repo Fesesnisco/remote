@@ -116,6 +116,15 @@ for(i in 1:nrow(th)){
 }
 ```
 
+```{r}
+ggplot(th, aes(x=temp, y=hum)) + geom_tile(aes(fill = p, width = 10, height = 15)) + geom_rug(alpha = 0.01) + xlab("Temperature") + ylab("Humidity") + scale_fill_gradient(name = "Number of bikes")
+```
+
+Podemos observar fenómenos parecidos a los vistos en los gráficos anteriores. La probabilidad de alquilar bicicletas es más alta en días con altas temperaturas y bajos niveles de humedad, ya que se trata de días más apetecibles para el uso de este servicio. Por otro lado, cuando la temperatura es baja y la humedad alta, el número de bicis alquiladas se reduce. Esto tiene sentido debido a que son días con mucho frío.
+
+Por otro lado, el gráfico nos muestra que en las temperaturas más extremas, el uso de las bicicletas disminuye. Sin embargo, hay que aclarar que en esas zonas no hay individuos muestreados, por lo que el resultado proviene de una predicción más o menos acertada.
+
+A temperaturas inferiores a los 15 grados observamos que el alquiler de bicis se reduce drásticamente sin importar en exceso la humedad. 
 
 ## EXERCISE:
 
