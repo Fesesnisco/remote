@@ -139,6 +139,8 @@ Analyse the influence of **bedrooms, bathrooms, sqft_living** and **floors** on 
 
 
 ```{r}
+set.seed(100)
+
 d <- read.csv("kc_house_data.csv")
 
 sampled <- sample_n(d, 1000)
@@ -159,4 +161,22 @@ for(c in names(results)[1:4])
   }
 }
 ```
+
+```{r}
+plot1 = ggplot(sampled, aes(x = bedrooms, y = results$bedrooms)) + geom_line() + geom_rug(alpha = 0.1, sides = "b") + ylab("Prediction") + xlab("Bedrooms")
+plot2 = ggplot(sampled, aes(x = bathrooms, y = results$bathrooms)) + geom_line() + geom_rug(alpha = 0.1, sides = "b") + xlab("Bathrooms")
+plot3 = ggplot(sampled, aes(x = sqft_living, y = results$sqft_living)) + geom_line() + geom_rug(alpha = 0.1, sides = "b") + xlab("Sqft Living")
+plot4 = ggplot(sampled, aes(x = floors, y = results$floors)) + geom_line() + geom_rug(alpha = 0.1, sides = "b")+ xlab("Floors")
+subplot(plot1, plot2, plot3, plot4, shareX = FALSE, titleX = TRUE)
+```
+
+En primer lugar, nos hemos dado cuenta de que las variables categóricas Bathrooms y Floors tienen valores decimales, lo cual no parece tener mucho sentido dado la naturaleza de la variable. Dicho esto pasamos a analizar como influyen estas variables en la predicción del precio de una vivienda.
+
+Curiosamente, encontramos que el modelo predice que las casa con 3, 4 o 5 dormitorios valen menos que las que tienen 1 o 2, lo que no parece ser del todo intuitivo. Sería interesante estudiar esta relación en profundidad, y determinar si es un error del modelo o un suceso de las casas de la zona.
+
+Respecto a la cantidad de baños, la mayoría de individuos tienen entre 1 y 4 baños. Dentro de este rango, el modelo predice que a más baños, mayor es el precio de la vivienda, como suele pasar en la vida real. Cabe recalcar que dentro de este intervalo el precio no varía excesivamente, aunque para determinar la influencia de esta variable es mejor utilizar otros gráficos.
+
+En cuanto a la variable de los metros cuadrados, podemos ver que el modelo ha sido entrenado en su mayoría con datos entre los 500 y 4000 pies cuadrados. Como podemos ver, existe una clara relación positiva entre el área y la predicción del precio, a más metros cuadrados mayor es la predicción.
+
+Finalmente, tenemos una relación creciente bastante clara entre el número de plantas y el precio de la vivienda. La mayor diferencia de precios la encontramos al pasar de casas de 2 plantas a viviendas de 3.
 
